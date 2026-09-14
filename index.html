@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Pinyon+Script&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin:0; padding:0; background:#5C1F2E; -webkit-font-smoothing:antialiased; }
+  body { overflow-x:hidden; }
+  * { box-sizing:border-box; }
+  a { color:#C4A572; text-decoration:none; }
+  a:hover { color:#E8DCC8; }
+  input, button { font-family:'Cormorant Garamond', serif; }
+  input:focus { outline:none; }
+  ::selection { background:#C4A572; color:#3E1220; }
+  @keyframes envFloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+  @keyframes shadowPulse { 0%,100% { opacity:.55; transform:scaleX(1); } 50% { opacity:.3; transform:scaleX(.9); } }
+  @keyframes drawDown { 0% { transform:scaleY(0); opacity:0; } 25% { opacity:1; } 100% { transform:scaleY(1); opacity:0; } }
+  @keyframes slowSpin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+  @keyframes slowSpinRev { from { transform:rotate(360deg); } to { transform:rotate(0deg); } }
+  @keyframes petalA { 0% { transform:translate3d(0,-12vh,0) rotate(0deg); } 50% { transform:translate3d(34px,45vh,0) rotate(160deg); } 100% { transform:translate3d(-18px,112vh,0) rotate(340deg); } }
+  @keyframes petalB { 0% { transform:translate3d(0,-12vh,0) rotate(0deg); } 40% { transform:translate3d(-40px,38vh,0) rotate(-140deg); } 100% { transform:translate3d(26px,112vh,0) rotate(-330deg); } }
+  @keyframes flipA { 0% { transform:rotateX(0deg); filter:blur(0); } 45% { transform:rotateX(-62deg); filter:blur(1.6px); opacity:.55; } 100% { transform:rotateX(0deg); filter:blur(0); } }
+  @keyframes flipB { 0% { transform:rotateX(0deg); filter:blur(0); } 45% { transform:rotateX(-62deg); filter:blur(1.6px); opacity:.55; } 100% { transform:rotateX(0deg); filter:blur(0); } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation:none !important; transition:none !important; }
+    [data-reveal] { opacity:1 !important; transform:none !important; clip-path:none !important; }
+  }
+</style>
+</helmet>
+
+<div style="position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.04;mix-blend-mode:multiply;background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>&quot;);background-size:240px 240px"></div>
+
+<div style="font-family:'Cormorant Garamond',serif;background:#5C1F2E;width:100%;overflow-x:hidden">
+
+<section data-screen-label="Envelope" style="position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(28px,6vh,54px);padding:8vh 20px;background:radial-gradient(120% 90% at 50% 45%, #6A2434 0%, #5C1F2E 45%, #3E1220 100%);overflow:hidden">
+  <div style="opacity:{{ envOpacity }};transition:opacity 900ms cubic-bezier(.22,.61,.36,1);display:flex;flex-direction:column;align-items:center;gap:clamp(28px,6vh,54px)">
+    <div style="perspective:1400px;perspective-origin:50% 0%;width:min(380px,84vw)">
+      <div style="position:relative;width:100%;aspect-ratio:1.45;transform-style:preserve-3d;animation:envFloat 6s ease-in-out infinite;cursor:pointer" onClick="{{ openEnvelope }}" role="button" tabIndex="0" aria-label="Open the invitation">
+
+        <div style="position:absolute;left:8%;right:8%;bottom:-26px;height:26px;background:radial-gradient(50% 100% at 50% 0%, rgba(0,0,0,.5), rgba(0,0,0,0) 70%);animation:shadowPulse 6s ease-in-out infinite;pointer-events:none"></div>
+
+        <div style="position:absolute;inset:0;background:#F5F0E8;box-shadow:0 2px 4px rgba(0,0,0,.18), 0 12px 28px rgba(0,0,0,.3), 0 40px 80px rgba(0,0,0,.35)"></div>
+
+        <div style="position:absolute;inset:0;background:#EBE3D5;clip-path:polygon(0 0, 50% 58%, 0 100%);z-index:2"></div>
+        <div style="position:absolute;inset:0;background:#EBE3D5;clip-path:polygon(100% 0, 50% 58%, 100% 100%);z-index:2"></div>
+        <div style="position:absolute;inset:0;background:#E4DACA;clip-path:polygon(0 100%, 50% 56%, 100% 100%);z-index:2"></div>
+
+        <div style="position:absolute;left:10%;right:10%;top:14%;bottom:14%;background:#F5F0E8;border:1px solid #E0D5C0;box-shadow:0 -2px 10px rgba(0,0,0,.12), 0 18px 40px rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:1;transform:{{ cardTransform }};opacity:{{ cardOpacity }};transition:transform 1100ms cubic-bezier(.22,.61,.36,1), opacity 700ms ease">
+          <div style="width:34px;height:1px;background:#C4A572"></div>
+          <div style="font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:#5C1F2E;font-weight:400">Together with their families</div>
+          <div style="font-family:'Pinyon Script',cursive;font-size:clamp(1.7rem,6vw,2.4rem);color:#5C1F2E;line-height:1.1;text-align:center">Olivia &amp; David</div>
+          <div style="font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:#5C1F2E">30 . 10 . 2027</div>
+        </div>
+
+        <div style="position:absolute;inset:0;z-index:3;transform-style:preserve-3d;transform-origin:50% 0%;transform:{{ flapTransform }};transition:transform 1100ms cubic-bezier(.6,0,.2,1);backface-visibility:hidden">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,#F0E9DC 0%, #E4DACA 100%);clip-path:polygon(0 0, 100% 0, 50% 72%);box-shadow:0 2px 6px rgba(0,0,0,.12)"></div>
+          <div style="position:absolute;left:50%;top:72%;width:62px;height:62px;margin-left:-31px;margin-top:-31px;border-radius:49% 51% 52% 48% / 50% 49% 51% 50%;background:radial-gradient(60% 60% at 38% 32%, #7A2233 0%, #62192A 45%, #4A1220 100%);box-shadow:inset 0 2px 5px rgba(255,255,255,.18), inset 0 -3px 7px rgba(0,0,0,.5), 0 4px 10px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;transform:{{ sealTransform }};opacity:{{ sealOpacity }};transition:transform 400ms cubic-bezier(.22,.61,.36,1), opacity 400ms ease">
+            <span style="font-family:'Pinyon Script',cursive;font-size:1.5rem;color:#C4A572;line-height:1;padding-bottom:4px">OD</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div style="width:40px;height:1px;background:#C4A572"></div>
+      <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8;font-weight:400">Open the envitation</div>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:50%;bottom:38px;width:1px;height:62px;margin-left:-.5px;background:#C4A572;transform-origin:top;animation:{{ indicatorAnimation }};visibility:{{ indicatorVisibility }};pointer-events:none"></div>
+</section>
+
+<section id="announcement" data-screen-label="Announcement" style="position:relative;text-align:center;padding:clamp(96px,18vw,180px) clamp(20px,6vw,64px);background:radial-gradient(120% 100% at 50% 50%, #6A2434 0%, #5C1F2E 50%, #3E1220 100%);overflow:hidden">
+  <div style="position:absolute;top:-40px;left:-50px;width:min(240px,46vw);opacity:.5;animation:slowSpin 120s linear infinite;pointer-events:none">
+    <svg viewBox="0 0 200 200" fill="none" stroke="#C4A572" stroke-width="1.1" stroke-linecap="round">
+      <path d="M30 170 C60 130 80 90 92 40" />
+      <path d="M92 40 C88 62 78 72 62 70 C70 52 80 44 92 40Z" />
+      <path d="M88 66 C82 86 70 96 54 94 C64 76 74 68 88 66Z" />
+      <path d="M82 94 C74 114 62 124 46 120 C58 102 68 94 82 94Z" />
+      <path d="M74 120 C66 138 54 148 40 146 C50 128 60 120 74 120Z" />
+      <path d="M96 46 C104 64 116 72 132 68 C124 50 112 42 96 46Z" />
+      <path d="M92 74 C102 92 114 100 130 96 C120 78 108 70 92 74Z" />
+      <path d="M86 102 C96 118 108 126 122 122 C112 106 100 98 86 102Z" />
+      <circle cx="94" cy="30" r="5" />
+    </svg>
+  </div>
+  <div style="position:absolute;bottom:-40px;right:-50px;width:min(240px,46vw);opacity:.5;transform:scaleX(-1);animation:slowSpinRev 120s linear infinite;pointer-events:none">
+    <svg viewBox="0 0 200 200" fill="none" stroke="#C4A572" stroke-width="1.1" stroke-linecap="round">
+      <path d="M30 170 C60 130 80 90 92 40" />
+      <path d="M92 40 C88 62 78 72 62 70 C70 52 80 44 92 40Z" />
+      <path d="M88 66 C82 86 70 96 54 94 C64 76 74 68 88 66Z" />
+      <path d="M82 94 C74 114 62 124 46 120 C58 102 68 94 82 94Z" />
+      <path d="M74 120 C66 138 54 148 40 146 C50 128 60 120 74 120Z" />
+      <path d="M96 46 C104 64 116 72 132 68 C124 50 112 42 96 46Z" />
+      <path d="M92 74 C102 92 114 100 130 96 C120 78 108 70 92 74Z" />
+      <path d="M86 102 C96 118 108 126 122 122 C112 106 100 98 86 102Z" />
+      <circle cx="94" cy="30" r="5" />
+    </svg>
+  </div>
+
+  <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+    <div style="position:absolute;left:8%;top:0;width:10px;height:10px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalA 24s linear infinite;animation-delay:-3s"></div>
+    <div style="position:absolute;left:22%;top:0;width:8px;height:8px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalB 30s linear infinite;animation-delay:-11s"></div>
+    <div style="position:absolute;left:37%;top:0;width:12px;height:12px;background:#C4A572;opacity:.25;border-radius:50% 0 50% 50%;animation:petalA 19s linear infinite;animation-delay:-7s"></div>
+    <div style="position:absolute;left:51%;top:0;width:7px;height:7px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalB 26s linear infinite;animation-delay:-16s"></div>
+    <div style="position:absolute;left:64%;top:0;width:11px;height:11px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalA 21s linear infinite;animation-delay:-2s"></div>
+    <div style="position:absolute;left:76%;top:0;width:9px;height:9px;background:#C4A572;opacity:.25;border-radius:50% 0 50% 50%;animation:petalB 28s linear infinite;animation-delay:-13s"></div>
+    <div style="position:absolute;left:87%;top:0;width:8px;height:8px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalA 18s linear infinite;animation-delay:-9s"></div>
+    <div style="position:absolute;left:95%;top:0;width:10px;height:10px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalB 23s linear infinite;animation-delay:-20s"></div>
+  </div>
+
+  <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:10px">
+    <div data-reveal="" style="width:40px;height:1px;background:#C4A572;margin-bottom:6px"></div>
+    <div data-reveal="" data-delay="90" style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8">We are saying I do</div>
+    <h1 data-reveal="wipe" data-delay="180" style="margin:.16em 0 0;font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(2.8rem,9vw,6rem);line-height:1;color:#F5F0E8">Olivia</h1>
+    <div data-reveal="" data-delay="270" style="font-family:'Pinyon Script',cursive;font-size:clamp(1.6rem,4vw,2.4rem);color:#C4A572;letter-spacing:.35em;line-height:1;margin:.1em 0">&amp;</div>
+    <h1 data-reveal="wipe" data-delay="360" style="margin:0;font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(2.8rem,9vw,6rem);line-height:1;color:#F5F0E8">David</h1>
+    <div data-reveal="" data-delay="450" style="margin-top:clamp(30px,6vw,54px);display:flex;flex-direction:column;align-items:center;gap:14px">
+      <div style="width:40px;height:1px;background:#C4A572"></div>
+      <div style="font-size:.78rem;letter-spacing:.26em;text-transform:uppercase;color:#E8DCC8">Saturday, the thirtieth of October</div>
+      <div style="font-size:.78rem;letter-spacing:.26em;text-transform:uppercase;color:#E8DCC8">Two thousand twenty seven</div>
+    </div>
+    <div data-reveal="wipe" data-delay="540" style="font-family:'Pinyon Script',cursive;font-size:clamp(2rem,6vw,3.4rem);color:#F5F0E8;margin-top:.35em">New York</div>
+  </div>
+</section>
+
+<section data-screen-label="Countdown" style="position:relative;text-align:center;padding:clamp(80px,14vw,140px) clamp(20px,6vw,64px);background:#F5F0E8">
+  <div data-reveal="" style="display:flex;flex-direction:column;align-items:center;gap:14px">
+    <div style="width:40px;height:1px;background:#C4A572"></div>
+    <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E">Counting the days</div>
+  </div>
+  <h2 data-reveal="wipe" data-delay="90" style="margin:.12em 0 clamp(40px,7vw,70px);font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(2.8rem,9vw,6rem);line-height:1.05;color:#5C1F2E">Until We Wed</h2>
+
+  <div data-reveal="" data-delay="180" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#C4A572;max-width:760px;margin:0 auto">
+    <div style="background:#F5F0E8;padding:clamp(18px,4vw,30px) 6px;display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div style="font-size:clamp(2rem,9vw,3.5rem);font-weight:300;line-height:1;color:#5C1F2E;font-variant-numeric:tabular-nums">{{ cdDays }}</div>
+      <div style="font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E">Days</div>
+    </div>
+    <div style="background:#F5F0E8;padding:clamp(18px,4vw,30px) 6px;display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div style="font-size:clamp(2rem,9vw,3.5rem);font-weight:300;line-height:1;color:#5C1F2E;font-variant-numeric:tabular-nums">{{ cdHours }}</div>
+      <div style="font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E">Hours</div>
+    </div>
+    <div style="background:#F5F0E8;padding:clamp(18px,4vw,30px) 6px;display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div style="font-size:clamp(2rem,9vw,3.5rem);font-weight:300;line-height:1;color:#5C1F2E;font-variant-numeric:tabular-nums">{{ cdMinutes }}</div>
+      <div style="font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E">Minutes</div>
+    </div>
+    <div style="background:#F5F0E8;padding:clamp(18px,4vw,30px) 6px;display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div style="font-size:clamp(2rem,9vw,3.5rem);font-weight:300;line-height:1;color:#5C1F2E;font-variant-numeric:tabular-nums;animation:{{ secondsAnimation }}">{{ cdSeconds }}</div>
+      <div style="font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E">Seconds</div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Our Story" style="position:relative;text-align:center;padding:clamp(96px,16vw,160px) clamp(20px,6vw,64px);background:radial-gradient(120% 100% at 50% 40%, #6A2434 0%, #5C1F2E 50%, #3E1220 100%);overflow:hidden">
+  <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+    <div style="position:absolute;left:14%;top:0;width:9px;height:9px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalA 27s linear infinite;animation-delay:-5s"></div>
+    <div style="position:absolute;left:44%;top:0;width:11px;height:11px;background:#C4A572;opacity:.25;border-radius:50% 0 50% 50%;animation:petalB 22s linear infinite;animation-delay:-14s"></div>
+    <div style="position:absolute;left:72%;top:0;width:8px;height:8px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalA 30s linear infinite;animation-delay:-8s"></div>
+    <div style="position:absolute;left:90%;top:0;width:10px;height:10px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalB 25s linear infinite;animation-delay:-18s"></div>
+  </div>
+
+  <div style="position:relative">
+    <div data-reveal="" style="display:flex;flex-direction:column;align-items:center;gap:14px">
+      <div style="width:40px;height:1px;background:#C4A572"></div>
+      <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8">The beginning</div>
+    </div>
+    <h2 data-reveal="wipe" data-delay="90" style="margin:.12em 0 clamp(34px,6vw,56px);font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(2.8rem,9vw,6rem);line-height:1.05;color:#F5F0E8">Of Our Forever</h2>
+
+    <p data-reveal="" data-delay="180" style="max-width:46ch;margin:0 auto 1.6em;font-weight:300;font-size:1.05rem;line-height:1.9;color:#E8DCC8;text-wrap:pretty">We met on a rain-soaked Tuesday in a bookshop on Bleecker Street, both reaching for the last copy of the same novel. Neither of us bought it.</p>
+    <p data-reveal="" data-delay="270" style="max-width:46ch;margin:0 auto 1.6em;font-weight:300;font-size:1.05rem;line-height:1.9;color:#E8DCC8;text-wrap:pretty">Seven years of small mornings followed — coffee made two ways, a stubborn plant kept alive, a hundred unremarkable Thursdays that turned out to be the whole point.</p>
+    <p data-reveal="" data-delay="360" style="max-width:46ch;margin:0 auto;font-weight:300;font-size:1.05rem;line-height:1.9;color:#E8DCC8;text-wrap:pretty">Last autumn, on the same street, in the same rain, David asked. Olivia said yes before he finished the sentence.</p>
+
+    <div data-reveal="" data-delay="450" style="position:relative;width:min(340px,74vw);margin:clamp(56px,9vw,90px) auto 0">
+      <div style="position:absolute;inset:-6px;border:1px solid #C4A572;border-radius:50%;pointer-events:none"></div>
+      <div style="position:relative;width:100%;aspect-ratio:3/4;border-radius:50%;overflow:hidden;background:#F5F0E8;display:flex;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(0,0,0,.35)">
+        <span style="position:absolute;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E">Portrait</span>
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&amp;fit=crop&amp;w=900&amp;q=80" alt="Olivia and David" onError="{{ hideImage }}" style="position:relative;width:100%;height:100%;object-fit:cover;filter:sepia(.12) saturate(.9)" />
+      </div>
+      <div style="position:absolute;top:-34px;left:-42px;width:130px;opacity:.85;pointer-events:none">
+        <svg viewBox="0 0 200 200" fill="none" stroke="#C4A572" stroke-width="1.2" stroke-linecap="round">
+          <path d="M20 180 C60 140 90 90 110 30" />
+          <path d="M110 30 C104 56 92 68 72 66 C82 44 94 34 110 30Z" />
+          <path d="M100 68 C92 90 78 100 58 98 C70 78 84 70 100 68Z" />
+          <path d="M88 100 C80 120 66 130 48 128 C60 108 74 100 88 100Z" />
+          <path d="M114 38 C124 58 138 66 156 62 C146 42 132 34 114 38Z" />
+          <path d="M106 76 C118 94 132 102 150 98 C138 78 124 72 106 76Z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Ceremony and Reception" style="text-align:center;padding:clamp(88px,15vw,150px) clamp(20px,6vw,64px);background:#F5F0E8">
+  <div data-reveal="" style="display:flex;flex-direction:column;align-items:center;gap:14px">
+    <div style="width:40px;height:1px;background:#C4A572"></div>
+    <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E">The thirtieth of October</div>
+  </div>
+  <h2 data-reveal="wipe" data-delay="90" style="margin:.12em 0 clamp(44px,7vw,72px);font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(2.8rem,9vw,6rem);line-height:1.05;color:#5C1F2E">When &amp; Where</h2>
+
+  <div data-reveal="" data-delay="180" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:#C4A572;max-width:980px;margin:0 auto">
+    <div style="background:#F5F0E8;padding:clamp(34px,6vw,56px) clamp(18px,4vw,40px);display:flex;flex-direction:column;align-items:center;gap:18px">
+      <div style="font-family:'Pinyon Script',cursive;font-size:clamp(2rem,6vw,2.8rem);color:#5C1F2E;line-height:1">The Ceremony</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-weight:300;font-size:1.05rem;line-height:1.9;color:#5C1F2E">
+        <div>Four o'clock in the afternoon</div>
+        <div>Church of the Ascension</div>
+        <div>12 West 11th Street, New York</div>
+      </div>
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=Church+of+the+Ascension+New+York" target="_blank" rel="noopener" style="margin-top:8px;padding:15px 30px;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:#F5F0E8;background:linear-gradient(to right,#3E1220 50%,#5C1F2E 50%);background-size:201% 100%;background-position:right bottom;transition:background-position 700ms cubic-bezier(.22,.61,.36,1)" style-hover="background-position:left bottom;color:#F5F0E8">View on map</a>
+    </div>
+    <div style="background:#F5F0E8;padding:clamp(34px,6vw,56px) clamp(18px,4vw,40px);display:flex;flex-direction:column;align-items:center;gap:18px">
+      <div style="font-family:'Pinyon Script',cursive;font-size:clamp(2rem,6vw,2.8rem);color:#5C1F2E;line-height:1">The Reception</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-weight:300;font-size:1.05rem;line-height:1.9;color:#5C1F2E">
+        <div>Six o'clock until late</div>
+        <div>The Bowery Hall</div>
+        <div>231 Bowery, New York</div>
+      </div>
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=231+Bowery+New+York" target="_blank" rel="noopener" style="margin-top:8px;padding:15px 30px;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:#F5F0E8;background:linear-gradient(to right,#3E1220 50%,#5C1F2E 50%);background-size:201% 100%;background-position:right bottom;transition:background-position 700ms cubic-bezier(.22,.61,.36,1)" style-hover="background-position:left bottom;color:#F5F0E8">View on map</a>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Day Program" style="position:relative;text-align:center;padding:clamp(88px,15vw,150px) clamp(20px,6vw,64px);background:radial-gradient(120% 100% at 50% 45%, #6A2434 0%, #5C1F2E 52%, #3E1220 100%);overflow:hidden">
+  <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+    <div style="position:absolute;left:18%;top:0;width:9px;height:9px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalB 26s linear infinite;animation-delay:-6s"></div>
+    <div style="position:absolute;left:58%;top:0;width:11px;height:11px;background:#C4A572;opacity:.25;border-radius:50% 0 50% 50%;animation:petalA 20s linear infinite;animation-delay:-15s"></div>
+    <div style="position:absolute;left:83%;top:0;width:8px;height:8px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalB 29s linear infinite;animation-delay:-2s"></div>
+  </div>
+  <div style="position:relative">
+    <div data-reveal="" style="display:flex;flex-direction:column;align-items:center;gap:14px">
+      <div style="width:40px;height:1px;background:#C4A572"></div>
+      <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8">Our wedding</div>
+    </div>
+    <h2 data-reveal="wipe" data-delay="90" style="margin:.12em 0 clamp(44px,7vw,76px);font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(2.8rem,9vw,6rem);line-height:1.05;color:#F5F0E8">Day Program</h2>
+
+    <div data-reveal="" data-delay="180" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:clamp(36px,6vw,48px) 12px;max-width:900px;margin:0 auto">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+        <svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke="#F5F0E8" stroke-width="1" stroke-linecap="round">
+          <ellipse cx="18" cy="27" rx="11" ry="11.5" /><ellipse cx="29" cy="24" rx="10.5" ry="11" />
+          <path d="M26 10 l3 4 l3 -4 l-3 -3 z" />
+        </svg>
+        <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8">4:00 pm</div>
+        <div style="font-weight:300;font-size:.98rem;color:#E8DCC8">Ceremony</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+        <svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke="#F5F0E8" stroke-width="1" stroke-linecap="round">
+          <path d="M9 10 h28 l-14 15 z" /><path d="M23 25 v12" /><path d="M15 38 h16" /><path d="M31 7 a3 3 0 1 1 .1 0" />
+        </svg>
+        <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8">5:00 pm</div>
+        <div style="font-weight:300;font-size:.98rem;color:#E8DCC8">Cocktails</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+        <svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke="#F5F0E8" stroke-width="1" stroke-linecap="round">
+          <path d="M6 20 h34" /><path d="M10 20 v16" /><path d="M36 20 v16" /><ellipse cx="23" cy="14" rx="9" ry="3.4" /><path d="M23 17.4 v2.6" />
+        </svg>
+        <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8">6:30 pm</div>
+        <div style="font-weight:300;font-size:.98rem;color:#E8DCC8">Dinner</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+        <svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke="#F5F0E8" stroke-width="1" stroke-linecap="round">
+          <path d="M11 38 h24 v-9 h-24 z" /><path d="M14 29 v-8 h18 v8" /><path d="M18 21 v-6 h10 v6" /><path d="M23 15 v-5" />
+        </svg>
+        <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8">8:30 pm</div>
+        <div style="font-weight:300;font-size:.98rem;color:#E8DCC8">Cake</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+        <svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke="#F5F0E8" stroke-width="1" stroke-linecap="round">
+          <circle cx="16" cy="9" r="3.4" /><path d="M16 13 v10 l-6 14" /><path d="M16 23 l5 14" /><path d="M16 17 l12 3" />
+          <circle cx="32" cy="11" r="3.4" /><path d="M32 15 v9 l5 13" /><path d="M32 24 l-4 13" />
+        </svg>
+        <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8">9:00 pm</div>
+        <div style="font-weight:300;font-size:.98rem;color:#E8DCC8">Dancing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="RSVP" style="position:relative;text-align:center;padding:clamp(96px,16vw,170px) clamp(20px,6vw,64px);background:#F5F0E8;overflow:hidden">
+  <div style="position:absolute;inset:0;opacity:.35;pointer-events:none">
+    <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&amp;fit=crop&amp;w=1800&amp;q=80" alt="" onError="{{ hideImage }}" style="width:100%;height:100%;object-fit:cover;filter:sepia(.2) saturate(.85)" />
+  </div>
+  <div style="position:relative;max-width:560px;margin:0 auto;background:#F5F0E8;box-shadow:0 2px 6px rgba(0,0,0,.1), 0 30px 70px rgba(62,18,32,.3);padding:clamp(40px,8vw,72px) clamp(22px,6vw,56px)">
+    <div data-reveal="" style="display:flex;flex-direction:column;align-items:center;gap:14px">
+      <div style="width:40px;height:1px;background:#C4A572"></div>
+      <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E">Kindly</div>
+    </div>
+    <h2 data-reveal="wipe" data-delay="90" style="margin:.1em 0 .5em;font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(2.8rem,9vw,5rem);line-height:1.05;color:#5C1F2E">Reply</h2>
+    <p data-reveal="" data-delay="180" style="max-width:46ch;margin:0 auto clamp(30px,6vw,44px);font-weight:300;font-size:1.05rem;line-height:1.9;color:#5C1F2E">We would be honoured by your presence. Please respond on or before the first of September, 2027.</p>
+
+    <form data-reveal="" data-delay="270" onSubmit="{{ submitRsvp }}" style="display:flex;flex-direction:column;gap:26px;align-items:center">
+      <input type="text" name="name" placeholder="FULL NAME" required="" style="width:100%;max-width:380px;padding:10px 4px;text-align:center;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E;background:transparent;border:none;border-bottom:1px solid #C4A572" />
+      <input type="email" name="email" placeholder="EMAIL" required="" style="width:100%;max-width:380px;padding:10px 4px;text-align:center;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E;background:transparent;border:none;border-bottom:1px solid #C4A572" />
+      <input type="number" name="guests" min="1" max="6" placeholder="NUMBER OF GUESTS" style="width:100%;max-width:380px;padding:10px 4px;text-align:center;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E;background:transparent;border:none;border-bottom:1px solid #C4A572" />
+      <input type="text" name="note" placeholder="A NOTE FOR THE COUPLE" style="width:100%;max-width:380px;padding:10px 4px;text-align:center;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E;background:transparent;border:none;border-bottom:1px solid #C4A572" />
+      <button type="submit" style="margin-top:10px;padding:16px 44px;border:none;cursor:pointer;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:#F5F0E8;background:linear-gradient(to right,#3E1220 50%,#5C1F2E 50%);background-size:201% 100%;background-position:right bottom;transition:background-position 700ms cubic-bezier(.22,.61,.36,1)" style-hover="background-position:left bottom">{{ rsvpLabel }}</button>
+    </form>
+  </div>
+</section>
+
+<section data-screen-label="Where to Stay" style="text-align:center;padding:clamp(88px,15vw,150px) clamp(20px,6vw,64px);background:#EFE9DE">
+  <div data-reveal="" style="display:flex;flex-direction:column;align-items:center;gap:14px">
+    <div style="width:40px;height:1px;background:#C4A572"></div>
+    <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#5C1F2E">For those travelling</div>
+  </div>
+  <h2 data-reveal="wipe" data-delay="90" style="margin:.12em 0 clamp(44px,7vw,72px);font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(2.8rem,9vw,6rem);line-height:1.05;color:#5C1F2E">Where to Stay</h2>
+
+  <div data-reveal="" data-delay="180" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:#C4A572;max-width:1040px;margin:0 auto">
+    <div style="background:#EFE9DE;padding:clamp(34px,5vw,50px) clamp(18px,3vw,32px);display:flex;flex-direction:column;align-items:center;gap:16px">
+      <div style="font-family:'Pinyon Script',cursive;font-size:clamp(1.7rem,5vw,2.3rem);color:#5C1F2E;line-height:1.1">The Greenwich</div>
+      <div style="font-weight:300;font-size:1.02rem;line-height:1.9;color:#5C1F2E">Five minutes from the ceremony.<br />Rooms held under "Olivia &amp; David".</div>
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=hotels+near+West+11th+Street+New+York" target="_blank" rel="noopener" style="margin-top:6px;padding:14px 26px;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:#F5F0E8;background:linear-gradient(to right,#3E1220 50%,#5C1F2E 50%);background-size:201% 100%;background-position:right bottom;transition:background-position 700ms cubic-bezier(.22,.61,.36,1)" style-hover="background-position:left bottom;color:#F5F0E8">Book your stay</a>
+    </div>
+    <div style="background:#EFE9DE;padding:clamp(34px,5vw,50px) clamp(18px,3vw,32px);display:flex;flex-direction:column;align-items:center;gap:16px">
+      <div style="font-family:'Pinyon Script',cursive;font-size:clamp(1.7rem,5vw,2.3rem);color:#5C1F2E;line-height:1.1">Bowery House</div>
+      <div style="font-weight:300;font-size:1.02rem;line-height:1.9;color:#5C1F2E">Above the reception hall.<br />Best for those staying late.</div>
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=hotels+near+231+Bowery+New+York" target="_blank" rel="noopener" style="margin-top:6px;padding:14px 26px;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:#F5F0E8;background:linear-gradient(to right,#3E1220 50%,#5C1F2E 50%);background-size:201% 100%;background-position:right bottom;transition:background-position 700ms cubic-bezier(.22,.61,.36,1)" style-hover="background-position:left bottom;color:#F5F0E8">Book your stay</a>
+    </div>
+    <div style="background:#EFE9DE;padding:clamp(34px,5vw,50px) clamp(18px,3vw,32px);display:flex;flex-direction:column;align-items:center;gap:16px">
+      <div style="font-family:'Pinyon Script',cursive;font-size:clamp(1.7rem,5vw,2.3rem);color:#5C1F2E;line-height:1.1">The Marlton</div>
+      <div style="font-weight:300;font-size:1.02rem;line-height:1.9;color:#5C1F2E">A quieter room on the park.<br />A short walk to both venues.</div>
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=hotels+near+Washington+Square+Park+New+York" target="_blank" rel="noopener" style="margin-top:6px;padding:14px 26px;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:#F5F0E8;background:linear-gradient(to right,#3E1220 50%,#5C1F2E 50%);background-size:201% 100%;background-position:right bottom;transition:background-position 700ms cubic-bezier(.22,.61,.36,1)" style-hover="background-position:left bottom;color:#F5F0E8">Book your stay</a>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Attire" style="position:relative;text-align:center;padding:clamp(88px,15vw,150px) clamp(20px,6vw,64px);background:radial-gradient(120% 100% at 50% 45%, #6A2434 0%, #5C1F2E 52%, #3E1220 100%);overflow:hidden">
+  <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+    <div style="position:absolute;left:28%;top:0;width:9px;height:9px;background:#E8DCC8;opacity:.25;border-radius:50% 0 50% 50%;animation:petalA 28s linear infinite;animation-delay:-10s"></div>
+    <div style="position:absolute;left:68%;top:0;width:10px;height:10px;background:#C4A572;opacity:.25;border-radius:50% 0 50% 50%;animation:petalB 24s linear infinite;animation-delay:-4s"></div>
+  </div>
+  <div style="position:relative">
+    <div data-reveal="" style="display:flex;flex-direction:column;align-items:center;gap:14px">
+      <div style="width:40px;height:1px;background:#C4A572"></div>
+      <div style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8">The</div>
+    </div>
+    <h2 data-reveal="wipe" data-delay="90" style="margin:.12em 0 clamp(34px,6vw,54px);font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(2.8rem,9vw,6rem);line-height:1.05;color:#F5F0E8">Wedding Attire</h2>
+    <p data-reveal="" data-delay="180" style="max-width:46ch;margin:0 auto 1.6em;font-weight:300;font-size:1.05rem;line-height:1.9;color:#E8DCC8;text-wrap:pretty">Black tie optional. Long dresses, dinner jackets, and whatever lets you stay on the floor until the band packs up.</p>
+    <p data-reveal="" data-delay="270" style="max-width:46ch;margin:0 auto;font-weight:300;font-size:1.05rem;line-height:1.9;color:#E8DCC8;text-wrap:pretty">If it helps, these are the colours of the evening — we would love you somewhere within them.</p>
+    <div data-reveal="" data-delay="360" style="display:flex;justify-content:center;gap:clamp(16px,4vw,28px);margin-top:clamp(38px,7vw,58px)">
+      <div style="width:42px;height:42px;border-radius:50%;background:#5C1F2E;border:1px solid #C4A572;box-shadow:0 6px 16px rgba(0,0,0,.35)"></div>
+      <div style="width:42px;height:42px;border-radius:50%;background:#8C5A63;border:1px solid #C4A572;box-shadow:0 6px 16px rgba(0,0,0,.35)"></div>
+      <div style="width:42px;height:42px;border-radius:50%;background:#C4A572;border:1px solid #C4A572;box-shadow:0 6px 16px rgba(0,0,0,.35)"></div>
+      <div style="width:42px;height:42px;border-radius:50%;background:#E8DCC8;border:1px solid #C4A572;box-shadow:0 6px 16px rgba(0,0,0,.35)"></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Closing" style="position:relative;text-align:center;min-height:92svh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(22px,4vw,34px);padding:clamp(96px,18vw,180px) clamp(20px,6vw,64px);background:radial-gradient(110% 90% at 50% 50%, #5C1F2E 0%, #4A1726 55%, #3E1220 100%);overflow:hidden">
+  <div style="position:absolute;left:50%;top:50%;width:min(620px,120vw);transform:translate(-50%,-50%);opacity:.12;pointer-events:none">
+    <svg viewBox="0 0 200 200" fill="none" stroke="#E8DCC8" stroke-width="1" stroke-linecap="round">
+      <path d="M100 190 C100 140 100 90 100 20" />
+      <path d="M100 40 C82 44 68 58 64 78 C86 78 98 62 100 40Z" />
+      <path d="M100 40 C118 44 132 58 136 78 C114 78 102 62 100 40Z" />
+      <path d="M100 80 C80 84 64 100 60 122 C84 122 98 104 100 80Z" />
+      <path d="M100 80 C120 84 136 100 140 122 C116 122 102 104 100 80Z" />
+      <path d="M100 124 C84 128 70 142 66 162 C88 162 98 146 100 124Z" />
+      <path d="M100 124 C116 128 130 142 134 162 C112 162 102 146 100 124Z" />
+      <circle cx="100" cy="14" r="6" />
+    </svg>
+  </div>
+  <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:clamp(18px,3vw,26px)">
+    <div data-reveal="" style="width:40px;height:1px;background:#C4A572"></div>
+    <div data-reveal="" data-delay="90" style="font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:#E8DCC8">We cannot wait to see you</div>
+    <div data-reveal="wipe" data-delay="180" style="font-family:'Pinyon Script',cursive;font-size:clamp(3.2rem,12vw,7.5rem);line-height:1.05;color:#F5F0E8">Olivia &amp; David</div>
+    <div data-reveal="" data-delay="270" style="font-size:.78rem;letter-spacing:.26em;text-transform:uppercase;color:#C4A572">#OliviaTakesDavid</div>
+    <div data-reveal="" data-delay="360" style="width:40px;height:1px;background:#C4A572;margin-top:10px"></div>
+    <div data-reveal="" data-delay="450" style="font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:#E8DCC8">30 . 10 . 2027 &nbsp;·&nbsp; New York</div>
+  </div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:900}}">
+const CONFIG = {
+  couple: { one: "Olivia", two: "David", monogram: "OD", hashtag: "#OliviaTakesDavid" },
+  date: "2027-10-30T16:00:00",
+  city: "New York",
+  rsvpDeadline: "2027-09-01"
+};
+
+class Component extends DCLogic {
+  state = { stage: 0, d: "00", h: "00", m: "00", s: "00", tick: 0, sent: false };
+
+  get reduced() {
+    return typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  componentDidMount() {
+    this.target = new Date(CONFIG.date).getTime();
+    this.count();
+    this.timer = setInterval(() => this.count(), 1000);
+    this.scan();
+    [400, 1200, 2500, 4500].forEach(t => setTimeout(() => this.scan(), t));
+  }
+
+  componentDidUpdate() { this.scan(); }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    if (this.io) this.io.disconnect();
+  }
+
+  count() {
+    const diff = Math.max(0, this.target - Date.now());
+    const p = n => String(n).padStart(2, "0");
+    this.setState({
+      d: p(Math.floor(diff / 86400000)),
+      h: p(Math.floor(diff / 3600000) % 24),
+      m: p(Math.floor(diff / 60000) % 60),
+      s: p(Math.floor(diff / 1000) % 60),
+      tick: this.state.tick + 1
+    });
+  }
+
+  scan() {
+    if (this.reduced) return;
+    if (!this.io) {
+      this.io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          const node = e.target;
+          const targets = node.hasAttribute("data-reveal") ? [node] : [];
+          node.querySelectorAll(":scope > [data-reveal]").forEach(c => targets.push(c));
+          targets.forEach(el => {
+            el.style.opacity = "1";
+            el.style.transform = "none";
+            el.style.clipPath = "inset(0 0 0 0)";
+          });
+          this.io.unobserve(node);
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -6% 0px" });
+    }
+    document.querySelectorAll("[data-reveal]:not([data-obs])").forEach(el => {
+      el.setAttribute("data-obs", "1");
+      const wipe = el.getAttribute("data-reveal") === "wipe";
+      const d = (parseInt(el.getAttribute("data-delay") || "0", 10)) + "ms";
+      const e = "cubic-bezier(.22,.61,.36,1)";
+      el.style.transition = `opacity 900ms ${e} ${d}, transform 900ms ${e} ${d}, clip-path 1000ms ${e} ${d}`;
+      el.style.willChange = "opacity, transform";
+      el.style.opacity = "0";
+      if (wipe) { el.style.clipPath = "inset(0 100% 0 0)"; }
+      else { el.style.transform = "translateY(12px)"; }
+      // A zero-area clip-path never reports as intersecting — watch a sized ancestor instead.
+      this.io.observe(wipe ? (el.parentElement || el) : el);
+    });
+  }
+
+  open = () => {
+    if (this.state.stage > 0) return;
+    if (this.reduced) { this.setState({ stage: 5 }); this.scrollOn(); return; }
+    this.setState({ stage: 1 });
+    setTimeout(() => this.setState({ stage: 2 }), 200);
+    setTimeout(() => this.setState({ stage: 3 }), 900);
+    setTimeout(() => { this.setState({ stage: 4 }); this.scrollOn(); }, 1600);
+    setTimeout(() => this.setState({ stage: 5 }), 2700);
+  };
+
+  scrollOn() {
+    const el = document.getElementById("announcement");
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top, behavior: this.reduced ? "auto" : "smooth" });
+  }
+
+  renderVals() {
+    const st = this.state.stage;
+    return {
+      cdDays: this.state.d,
+      cdHours: this.state.h,
+      cdMinutes: this.state.m,
+      cdSeconds: this.state.s,
+      secondsAnimation: this.reduced ? "none" : (this.state.tick % 2 ? "flipA" : "flipB") + " 520ms cubic-bezier(.22,.61,.36,1)",
+      openEnvelope: this.open,
+      sealTransform: st >= 1 ? "scale(1.16)" : "scale(1)",
+      sealOpacity: st >= 1 ? "0" : "1",
+      flapTransform: st >= 2 ? "rotateX(-180deg)" : "rotateX(0deg)",
+      cardTransform: st >= 3 ? "translateY(-60%) scale(1.04)" : "translateY(0) scale(1)",
+      cardOpacity: st >= 4 ? "0" : "1",
+      envOpacity: st >= 4 ? "0" : "1",
+      indicatorAnimation: st >= 4 ? "drawDown 2400ms cubic-bezier(.22,.61,.36,1) infinite" : "none",
+      indicatorVisibility: st >= 4 ? "visible" : "hidden",
+      rsvpLabel: this.state.sent ? "Thank you" : "Send our reply",
+      hideImage: e => { e.target.style.display = "none"; },
+      submitRsvp: e => { e.preventDefault(); this.setState({ sent: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
